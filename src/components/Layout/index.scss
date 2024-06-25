@@ -22,3 +22,18 @@
 .bottom-tag-html {
     margin-left: -20px;
 }
+
+.container {
+    width: 100%;
+    height: 90%;
+    will-change: contents;
+    min-height: 566px;
+    position: absolute;
+    opacity: 0; //for fade in animation
+    top: 5%;
+    margin: 0 auto;
+    z-index: 1;
+    transform-style: preserve-3d;
+    animation: fadeIn 1s ease-in-out forwards;
+    animation-delay: 1s;
+}

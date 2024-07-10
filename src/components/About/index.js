@@ -36,7 +36,7 @@ const About = () => {
           <p>
             I am a full stack developer with a keen interest in web development.
           </p>
-          <p></p>
+          <p>lorem ipsum</p>
         </div>
       </div>
       {/* <Loader type="pacman" /> */}

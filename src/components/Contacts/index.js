@@ -1,15 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Loader from 'react-loaders'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import { useRef } from 'react'
 import emailjs from '@emailjs/browser'
 import AnimatedLetters from '../AnimatedLetters'
 import './index.scss'
 
 const Contact = () => {
-    
-
-    const [letterClass, setLetterClass] = useState('text-animate')
+  const [letterClass, setLetterClass] = useState('text-animate')
+  const refForm = useRef()
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -22,30 +19,50 @@ const Contact = () => {
     }
   }, [])
 
-    return (
-        <>
-        <div className='container contact-page'>
-            <div className='text-zone'>
-                <h1>
-                <AnimatedLetters 
-                    letterClass={letterClass}
-                    strArray={['C','o','n','t','a','c','t',' ','m', 'e']}
-                    idx={15}
-                />
-                </h1>
-                <p>Feel free to contact me for any inquiries or just to say hi!</p>
+  const sendEmail = (e) => {
+    e.preventDefault()
 
-                <div className="contact-form">
-            <form /*ref={form} onSubmit={sendEmail}*/>
+    emailjs.sendForm(
+      process.env.REACT_APP_EMAILJS_SERVICE_ID,
+      process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+      refForm.current,
+      process.env.REACT_APP_EMAILJS_USER_ID
+    )
+    .then((result) => {
+      console.log(result.text)
+      alert('Message sent successfully!')
+      window.location.reload(false)
+    }, (error) => {
+      console.log(error.text)
+      alert('An error occurred, Please try again!')
+      window.location.reload(false)
+    })
+  }
+
+  return (
+    <>
+      <div className='container contact-page'>
+        <div className='text-zone'>
+          <h1>
+            <AnimatedLetters 
+              letterClass={letterClass}
+              strArray={['C','o','n','t','a','c','t',' ','m', 'e']}
+              idx={15}
+            />
+          </h1>
+          <p>Feel free to contact me for any inquiries or just to say hi!</p>
+
+          <div className="contact-form">
+            <form ref={refForm} onSubmit={sendEmail}>
               <ul>
                 <li className="half">
-                  <input placeholder="Name" type="text" name="name" required />
+                  <input placeholder="Name" type="text" name="from_name" required />
                 </li>
                 <li className="half">
                   <input
                     placeholder="Email"
                     type="email"
-                    name="email"
+                    name="from_email"
                     required
                   />
                 </li>
@@ -70,11 +87,11 @@ const Contact = () => {
               </ul>
             </form>
           </div>
-            </div>
         </div>
-        <Loader type='ball-pulse' active />
-        </>
-    )
+      </div>
+      <Loader type='ball-pulse' active />
+    </>
+  )
 }
 
-export default Contact;
+export default Contact
